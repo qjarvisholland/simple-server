@@ -1,4 +1,4 @@
-(ns web.core
+(ns simple-server.core
   (:require [org.httpkit.server :as s]))
 
 (defn handler [req]
