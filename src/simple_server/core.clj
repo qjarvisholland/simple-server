@@ -1,5 +1,14 @@
 (ns simple-server.core
-  (:require [org.httpkit.server :as s]))
+  (:require [org.httpkit.server :as s]
+            [compojure.core :refer :all]
+            [compojure.route :as route]
+            [ring.adapter.jetty :as jetty]
+            [clojure.java.io :as io]
+            [clojure.data.json :as json]
+            [clojure.java.http :as http]
+            [clojure.edn :as edn]
+            )
+  )
 
 (defn handler [req]
   {:status 200
