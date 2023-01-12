@@ -25,7 +25,9 @@
        :body "Image not found"})))
 You'll need to route requests to this handler using Compojure:
 (defroutes app-routes
-  (GET "/image" [] (image-handler)))
+  (GET "/image" [] (image-handler))
+  (GET "/index" [] (handler))
+           )
 
 (defn create-server []
   (s/run-server handler {:port 8080}))
