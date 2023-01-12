@@ -30,7 +30,7 @@ You'll need to route requests to this handler using Compojure:
            )
 
 (defn create-server []
-  (s/run-server handler {:port 8080}))
+  (s/run-server app-routes {:port 8080}))
 
 (defn stop-server [server]
   (server :timeout 10))
