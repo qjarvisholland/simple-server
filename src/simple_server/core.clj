@@ -4,7 +4,7 @@
 (defn handler [req]
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body "<h1> HI !!!</h1>"})
+   :body (str (slurp "https://quinnjh.net/projects"))})
 
 (defn create-server []
   (s/run-server handler {:port 8080}))
@@ -12,4 +12,3 @@
 (defn stop-server [server]
   (server :timeout 10))
   
-
