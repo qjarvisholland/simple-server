@@ -1,0 +1,39 @@
+---
+- name: Deploy Jetty Server on Docker
+  hosts: localhost
+  gather_facts: no
+  become: false  # No need for privilege escalation
+  tasks:
+    # Task to build the Docker image from the Dockerfile
+    - name: Build Docker image
+      community.docker.docker_image:
+        name: "jettyserver"  # Name of the Docker image
+        source: build
+        build:
+          path: "."  # Path where Dockerfile is located (current directory)
+          pull: yes  # Always pull the latest base image
+        state: present
+
+    # Task to run the Docker container
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: "jettyserver"  # Name of the Docker container
+        image: "jettyserver:latest"  # Use the image we just built
+        state: started
+        ports:
+          - "3000:3000"  # Map container port 3000 to host port 3000
+        volumes:
+          - "./:/app"  # Mount the current directory to /app in the container
+        command: "/bin/sh -c 'cd /app && ./make-jetty-server.sh'"  # Run the setup script
+        restart_policy: always  # Ensure the container restarts if it fails
+
+    # Task to check that the Jetty server is running and accessible on port 3000
+    - name: Wait for Jetty server to start
+      uri:
+        url: "http://localhost:3000"
+        method: GET
+        return_content: yes
+      register: webpage
+      until: webpage.status == 200  # Retry until the server is up
+      retries: 10  # Retry up to 10 times
+      delay: 5  # Wait 5 seconds between retries
